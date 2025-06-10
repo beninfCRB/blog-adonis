@@ -1,0 +1,32 @@
+@layout.master({ title: "Daftar Post" })
+  @slot('meta')
+    <meta name="description" content="A welcome page made with EdgeJS" />
+  @endslot
+  
+  @slot('main')
+    <h1>
+      Buat Post Baru
+    </h1>
+
+    <form action="/posts" method="POST">
+      {{ csrfField() }}
+      <div>
+        <label for="judul">Judul:</label>        <br />
+        <input
+          type="text"
+          id="judul"
+          name="judul"
+          required
+          style="width:
+100%; padding: 8px; margin-bottom: 10px;"
+        />
+      </div>
+      <div>
+        <label for="konten">Konten:</label>        <br />
+        <textarea id="konten" name="konten" rows="5" required style="width: 100%; padding: 8px;"></textarea>
+      </div>
+      <button type="submit" style="margin-top: 10px; padding: 8px
+15px;">Simpan</button>
+    </form>
+  @endslot
+@end

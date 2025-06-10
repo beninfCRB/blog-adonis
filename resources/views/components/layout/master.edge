@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {{ title || "Your default title" }}
+    </title>
+    @if ($slots.meta)
+      {{{ await $slots.meta() }}}
+    @endif
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      
+      .nav {
+        background: f0f0f0;
+        padding: 10px;
+        margin-bottom: 20px;
+      }
+      
+      .post {
+        border: 1px solid ddd;
+        padding: 15px;
+        margin-bottom: 15px;
+      }
+      
+      .actions a {
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/">Home</a>|
+ <a href="/posts">Semua Post</a>|
+ <a href="/posts/create">Buat Baru</a>
+    </nav>
+    {{{ await $slots.main() }}}
+  </body>
+</html>

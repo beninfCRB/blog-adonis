@@ -1,0 +1,29 @@
+@layout.master({ title: "Daftar Post" })
+  @slot('meta')
+    <meta name="description" content="A welcome page made with EdgeJS" />
+  @endslot
+  
+  @slot('main')
+    <div>
+      <h1>
+        {{ post.judul }}
+      </h1>
+      <p>
+        {{ post.konten }}
+      </p>
+      <small>Dibuat: {{ post.createdAt }} | Diupdate: {{ post.updatedAt
+}}</small>
+
+      <div style="margin-top: 20px;">
+        <a href="/posts/{{ post.id }}/edit">Edit</a>|
+        <form action="/posts/{{ post.id }}" method="POST" style="display:
+inline;">
+          <input type="hidden" name="_method" value="DELETE" />
+          <button type="submit">Hapus</button>
+        </form>
+        |
+ <a href="/posts">Kembali</a>
+      </div>
+    </div>
+  @endslot
+@end

@@ -1,0 +1,36 @@
+@layout.master({ title: "Daftar Post" })
+  @slot('meta')
+    <meta name="description" content="A welcome page made with EdgeJS" />
+  @endslot
+  
+  @slot('main')
+    <h1>
+      Daftar Post
+    </h1>
+
+    @if(posts.length > 0)
+      @each(post in posts)
+        <div class="post">
+          <h2>
+            {{ post.judul }}
+          </h2>
+          <p>
+            {{ post.konten.substring(0, 100) }}...
+          </p>
+          <div class="actions">
+            <a href="/posts/{{ post.id }}">Lihat</a>
+            <a href="/posts/{{ post.id }}/edit">Edit</a>
+            <form action="/posts/{{ post.id }}?_method=DELETE" method="POST" style="display: inline;">
+              {{ csrfField() }}
+              <button type="submit">Hapus</button>
+            </form>
+          </div>
+        </div>
+      @endeach
+    @else
+      <p>
+        Belum ada post
+      </p>
+    @endif
+  @endslot
+@end
