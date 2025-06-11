@@ -4,13 +4,13 @@
   @endslot
   
   @slot('main')
-    <h1>
+    <h1 class="mb-4">
       Daftar Product
     </h1>
 
     @if(products.length > 0)
       @each(product in products)
-        <div class="product">
+        <div class="post">
           <h2>
             Name: {{ product.name }}
           </h2>
@@ -21,7 +21,7 @@
             Price: {{ product.price }}
           </h3>
           <h3>
-            Stock: {{ product.stock }}
+            Stock:{{ product.stock }}
           </h3>
           <div class="actions">
             <a href="/web/products/{{ product.id }}">Lihat</a>

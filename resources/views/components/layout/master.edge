@@ -33,18 +33,43 @@
         margin-right: 10px;
       }
     </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
-  <body>
-    <nav>
-      <a href="/">Home</a>|
-      @if(title === 'Daftar Product')
-        <a href="/web/products">Semua Post</a>|
-        <a href="/web/products/create">Buat Baru</a>
-      @else
-        <a href="/web/posts">Semua Post</a>|
-        <a href="/web/posts/create">Buat Baru</a>
-      @endif
+  <body class="font-sans antialiased">
+    <nav class="bg-white shadow dark:bg-gray-800">
+      <div
+        class="container flex items-center justify-center p-6 mx-auto text-gray-600 capitalize dark:text-gray-300 gap-4"
+      >
+        <a
+          href="/"
+          class="text-gray-800 transition-colors duration-300 transform dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
+        >home</a>
+
+        @if(title === 'Daftar Product')
+          <a
+            href="/web/products"
+            class="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+          >Semua Produk</a>
+
+          <a
+            href="/web/products/create"
+            class="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+          >Buat Baru</a>
+        @else
+          <a
+            href="/web/posts"
+            class="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+          >Semua Post</a>
+
+          <a
+            href="/web/posts/create"
+            class="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+          >Buat Baru</a>
+        @endif
+      </div>
     </nav>
-    {{{ await $slots.main() }}}
+    <div class="py-4">
+      {{{ await $slots.main() }}}
+    </div>
   </body>
 </html>
