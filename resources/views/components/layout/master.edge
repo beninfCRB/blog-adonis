@@ -37,8 +37,13 @@
   <body>
     <nav>
       <a href="/">Home</a>|
- <a href="/posts">Semua Post</a>|
- <a href="/posts/create">Buat Baru</a>
+      @if(title === 'Daftar Product')
+        <a href="/web/products">Semua Post</a>|
+        <a href="/web/products/create">Buat Baru</a>
+      @else
+        <a href="/web/posts">Semua Post</a>|
+        <a href="/web/posts/create">Buat Baru</a>
+      @endif
     </nav>
     {{{ await $slots.main() }}}
   </body>

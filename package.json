@@ -12,6 +12,7 @@
     "cr": "node ace make:controller",
     "md": "node ace make:model",
     "vw": "node ace make:view",
+    "vl": "node ace make:validator",
     "mg": "node ace make:migration",
     "mgrun": "node ace migration:run",
     "mgfresh": "node ace migration:fresh",

@@ -1,0 +1,54 @@
+@layout.master({ title: "Create Poduct" })
+  @slot('meta')
+    <meta name="description" content="A welcome page made with EdgeJS" />
+  @endslot
+  
+  @slot('main')
+    <h1>
+      Buat Produk Baru
+    </h1>
+
+    <form action="/web/products" method="POST">
+      {{ csrfField() }}
+      <div>
+        <label for="name">name:</label>        <br />
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          style="width:
+100%; padding: 8px; margin-bottom: 10px;"
+        />
+      </div>
+      <div>
+        <label for="description">description:</label>        <br />
+        <textarea id="description" name="description" rows="5" required style="width: 100%; padding: 8px;"></textarea>
+      </div>
+      <div>
+        <label for="price">price:</label>        <br />
+        <input
+          type="number"
+          id="price"
+          name="price"
+          required
+          style="width:
+100%; padding: 8px; margin-bottom: 10px;"
+        />
+      </div>
+      <div>
+        <label for="stock">stock:</label>        <br />
+        <input
+          type="number"
+          id="stock"
+          name="stock"
+          required
+          style="width:
+100%; padding: 8px; margin-bottom: 10px;"
+        />
+      </div>
+      <button type="submit" style="margin-top: 10px; padding: 8px
+15px;">Simpan</button>
+    </form>
+  @endslot
+@end

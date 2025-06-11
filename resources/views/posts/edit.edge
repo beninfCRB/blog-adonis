@@ -8,7 +8,7 @@
       Edit Post
     </h1>
 
-    <form action="/posts/{{ post.id }}?_method=PUT" method="POST">
+    <form action="/web/posts/{{ post.id }}?_method=PUT" method="POST">
       {{ csrfField() }}
       <div>
         <label for="judul">Judul:</label>        <br />

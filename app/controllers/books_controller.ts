@@ -9,7 +9,7 @@ export default class BooksController {
   /**
    * Handle form submission for the get action
    */
-  async get({ response }: HttpContext) {
+  async showAll({ response }: HttpContext) {
     const data = await Book.all()
     return response.json({
       message: 'Buku berhasil diambil',

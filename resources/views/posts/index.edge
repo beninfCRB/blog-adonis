@@ -18,9 +18,9 @@
             {{ post.konten.substring(0, 100) }}...
           </p>
           <div class="actions">
-            <a href="/posts/{{ post.id }}">Lihat</a>
-            <a href="/posts/{{ post.id }}/edit">Edit</a>
-            <form action="/posts/{{ post.id }}?_method=DELETE" method="POST" style="display: inline;">
+            <a href="/web/posts/{{ post.id }}">Lihat</a>
+            <a href="/web/posts/{{ post.id }}/edit">Edit</a>
+            <form action="/web/posts/{{ post.id }}?_method=DELETE" method="POST" style="display: inline;">
               {{ csrfField() }}
               <button type="submit">Hapus</button>
             </form>

@@ -1,0 +1,35 @@
+@layout.master({ title: "Show Product" })
+  @slot('meta')
+    <meta name="description" content="A welcome page made with EdgeJS" />
+  @endslot
+  
+  @slot('main')
+    <div>
+      <h1>
+        {{ product.name }}
+      </h1>
+      <p>
+        {{ product.description }}
+      </p>
+      <p>
+        {{ product.price }}
+      </p>
+      <p>
+        {{ product.stock }}
+      </p>
+      <small>Dibuat: {{ product.createdAt }} | Diupdate: {{ product.updatedAt
+}}</small>
+
+      <div style="margin-top: 20px;">
+        <a href="/web/products/{{ product.id }}/edit">Edit</a>|
+        <form action="/web/products/{{ product.id }}" method="POST" style="display:
+inline;">
+          <input type="hidden" name="_method" value="DELETE" />
+          <button type="submit">Hapus</button>
+        </form>
+        |
+ <a href="/products">Kembali</a>
+      </div>
+    </div>
+  @endslot
+@end

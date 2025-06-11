@@ -1,0 +1,42 @@
+@layout.master({ title: "Daftar Product" })
+  @slot('meta')
+    <meta name="description" content="A welcome page made with EdgeJS" />
+  @endslot
+  
+  @slot('main')
+    <h1>
+      Daftar Product
+    </h1>
+
+    @if(products.length > 0)
+      @each(product in products)
+        <div class="product">
+          <h2>
+            Name: {{ product.name }}
+          </h2>
+          <p>
+            {{ product.description.substring(0, 100) }}...
+          </p>
+          <h3>
+            Price: {{ product.price }}
+          </h3>
+          <h3>
+            Stock: {{ product.stock }}
+          </h3>
+          <div class="actions">
+            <a href="/web/products/{{ product.id }}">Lihat</a>
+            <a href="/web/products/{{ product.id }}/edit">Edit</a>
+            <form action="/web/products/{{ product.id }}?_method=DELETE" method="POST" style="display: inline;">
+              {{ csrfField() }}
+              <button type="submit">Hapus</button>
+            </form>
+          </div>
+        </div>
+      @endeach
+    @else
+      <p>
+        Belum ada product
+      </p>
+    @endif
+  @endslot
+@end
