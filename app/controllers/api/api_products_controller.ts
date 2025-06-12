@@ -7,82 +7,110 @@ export default class ApiProductsController {
    * Handle form submission for the get action
    */
   async showAll({ response }: HttpContext) {
-    const data = await Product.all()
-    return response.json({
-      message: 'Produk berhasil diambil',
-      data,
-    })
+    try {
+      const data = await Product.all()
+      return response.json({
+        message: 'Produk berhasil diambil',
+        data,
+      })
+    } catch (error) {
+      return response.notFound({
+        message: error.message,
+        data: null,
+      })
+    }
   }
 
   /**
    * Handle form submission for the create action
    */
   async store({ request, response }: HttpContext) {
-    const data = request.all()
-    const payload = await createPostValidator.validate(data)
-    await Product.create(payload)
-    return response.json({
-      message: 'Produk berhasil ditambahkan',
-      data,
-    })
+    try {
+      const data = request.all()
+      const payload = await createPostValidator.validate(data)
+      await Product.create(payload)
+      return response.json({
+        message: 'Produk berhasil ditambahkan',
+        data,
+      })
+    } catch (error) {
+      return response.badRequest({
+        message: error.message,
+        data: null,
+      })
+    }
   }
 
   /**
    * Show individual record
    */
   async show({ params, response }: HttpContext) {
-    const data = await Product.findOrFail(params.id)
-    if (!data) {
+    try {
+      const data = await Product.findOrFail(params.id)
       return response.json({
-        message: `Produk dengan ID ${params.id} tidak ditemukan`,
+        message: 'Produk berhasil diambil',
+        data,
+      })
+    } catch (error) {
+      return response.notFound({
+        message: error.message,
         data: null,
       })
     }
-    return response.json({
-      message: 'Produk berhasil diambil',
-      data,
-    })
   }
 
   /**
    * Handle form submission for the edit action
    */
   async update({ params, request, response }: HttpContext) {
-    const data = request.all()
-    const payload = await createPostValidator.validate(data)
+    try {
+      const data = request.all()
+      const payload = await createPostValidator.validate(data)
 
-    const product = await Product.findOrFail(params.id)
-    if (!product) {
+      const product = await Product.findOrFail(params.id)
+      product.merge(payload)
+      await product.save()
+
       return response.json({
-        message: `Produk dengan ID ${params.id} tidak ditemukan`,
+        message: `Produk dengan ID ${params.id} berhasil diupdate`,
+        data: product,
+      })
+    } catch (error) {
+      if (error === 'E_RECORD_NOT_FOUND') {
+        return response.notFound({
+          message: `Produk dengan ID ${params.id} tidak ditemukan`,
+          data: null,
+        })
+      }
+      return response.badRequest({
+        message: error.message,
         data: null,
       })
     }
-
-    product.merge(payload)
-    await product.save()
-
-    return response.json({
-      message: `Produk dengan ID ${params.id} berhasil diupdate`,
-      data: product,
-    })
   }
 
   /**
    * Delete record
    */
   async destroy({ params, response }: HttpContext) {
-    const post = await Product.findOrFail(params.id)
-    if (!post) {
+    try {
+      const product = await Product.findOrFail(params.id)
+      await product.delete()
       return response.json({
-        message: `Produk dengan ID ${params.id} tidak ditemukan`,
+        message: `Produk dengan ID ${params.id} berhasil dihapus`,
+        data: null,
+      })
+    } catch (error) {
+      if (error === 'E_RECORD_NOT_FOUND') {
+        return response.notFound({
+          message: `Produk dengan ID ${params.id} tidak ditemukan`,
+          data: null,
+        })
+      }
+      return response.badRequest({
+        message: error.message,
         data: null,
       })
     }
-    await post.delete()
-    return response.json({
-      message: `Produk dengan ID ${params.id} berhasil dihapus`,
-      data: null,
-    })
   }
 }
