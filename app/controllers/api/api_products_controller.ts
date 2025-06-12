@@ -1,5 +1,5 @@
 import Product from '#models/product'
-import { createPostValidator } from '#validators/product'
+import { createProductValidator } from '#validators/product'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ApiProductsController {
@@ -27,7 +27,7 @@ export default class ApiProductsController {
   async store({ request, response }: HttpContext) {
     try {
       const data = request.all()
-      const payload = await createPostValidator.validate(data)
+      const payload = await createProductValidator.validate(data)
       await Product.create(payload)
       return response.json({
         message: 'Produk berhasil ditambahkan',
@@ -65,7 +65,7 @@ export default class ApiProductsController {
   async update({ params, request, response }: HttpContext) {
     try {
       const data = request.all()
-      const payload = await createPostValidator.validate(data)
+      const payload = await createProductValidator.validate(data)
 
       const product = await Product.findOrFail(params.id)
       product.merge(payload)

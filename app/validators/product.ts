@@ -1,6 +1,6 @@
 import vine from '@vinejs/vine'
 
-export const createPostValidator = vine.compile(
+export const createProductValidator = vine.compile(
   vine.object({
     name: vine.string(),
     description: vine.string().nullable(),
@@ -9,7 +9,7 @@ export const createPostValidator = vine.compile(
   })
 )
 
-export const updatePostValidator = vine.compile(
+export const updateProductValidator = vine.compile(
   vine.object({
     name: vine.string(),
     description: vine.string().nullable(),

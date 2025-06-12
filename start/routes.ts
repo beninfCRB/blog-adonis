@@ -13,6 +13,7 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 import ProductsController from '#controllers/products_controller'
 import ApiProductsController from '#controllers/api/api_products_controller'
+import ApiAuthsController from '#controllers/api/api_auths_controller'
 
 router.on('/').render('pages/home.edge')
 router
@@ -36,17 +37,24 @@ router
 
 router
   .group(() => {
-    router.get('books', [BooksController, 'showAll'])
-    router.get('books/:id', [BooksController, 'show'])
-    router.post('books', [BooksController, 'store'])
-    router.put('books/:id', [BooksController, 'update'])
-    router.delete('books/:id', [BooksController, 'destroy'])
+    router.post('login', [ApiAuthsController, 'login'])
+    router.post('register', [ApiAuthsController, 'register'])
+    router
+      .group(() => {
+        router.post('me', [ApiAuthsController, 'me'])
+        router.get('books', [BooksController, 'showAll'])
+        router.get('books/:id', [BooksController, 'show'])
+        router.post('books', [BooksController, 'store'])
+        router.put('books/:id', [BooksController, 'update'])
+        router.delete('books/:id', [BooksController, 'destroy'])
 
-    router.get('products', [ApiProductsController, 'showAll'])
-    router.get('products/:id', [ApiProductsController, 'show'])
-    router.post('products', [ApiProductsController, 'store'])
-    router.put('products/:id', [ApiProductsController, 'update'])
-    router.delete('products/:id', [ApiProductsController, 'destroy'])
+        router.get('products', [ApiProductsController, 'showAll'])
+        router.get('products/:id', [ApiProductsController, 'show'])
+        router.post('products', [ApiProductsController, 'store'])
+        router.put('products/:id', [ApiProductsController, 'update'])
+        router.delete('products/:id', [ApiProductsController, 'destroy'])
+      })
+      .use(middleware.auth())
   })
   .prefix('api/admin')
-  .use(middleware.api())
+  .use([middleware.api()])
