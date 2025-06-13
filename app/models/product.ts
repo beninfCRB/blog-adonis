@@ -9,9 +9,6 @@ export default class Product extends BaseModel {
   declare name: string
 
   @column()
-  declare sku: string | null
-
-  @column()
   declare description?: string | null
 
   @column()
@@ -21,7 +18,7 @@ export default class Product extends BaseModel {
   declare stock: number
 
   @column()
-  declare imagePath: string | null
+  declare imagePath?: string | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

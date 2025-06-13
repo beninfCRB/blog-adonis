@@ -1,5 +1,6 @@
 import Role from '#models/role'
-import { createProductValidator, updateProductValidator } from '#validators/product'
+import { updateProductValidator } from '#validators/product'
+import { createRoleValidator } from '#validators/role'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 
@@ -19,7 +20,7 @@ export default class ApiRolesController {
         query.where('name', 'like', `%${search}%`)
       }
 
-      const data = await query.paginate(page, limit)
+      const data = (await query.paginate(page, limit)).all()
 
       return response.json({
         message: 'Role berhasil diambil',
@@ -38,7 +39,7 @@ export default class ApiRolesController {
    */
   async store({ request, response }: HttpContext) {
     try {
-      const payload = await request.validateUsing(createProductValidator)
+      const payload = await createRoleValidator.validate(request.all())
       const data = await Role.create(payload)
       return response.json({
         message: 'Role berhasil ditambahkan',
@@ -75,7 +76,7 @@ export default class ApiRolesController {
    */
   async update({ params, request, response }: HttpContext) {
     try {
-      const payload = await request.validateUsing(updateProductValidator)
+      const payload = await updateProductValidator.validate(request.all())
       const role = await Role.findOrFail(params.id)
       role.merge(payload)
       await role.save()

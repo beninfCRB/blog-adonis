@@ -21,7 +21,7 @@ export default class ApiProductsController {
         query.where('name', 'like', `%${search}%`)
       }
 
-      const data = await query.paginate(page, limit)
+      const data = (await query.paginate(page, limit)).all()
 
       return response.json({
         message: 'Produk berhasil diambil',
@@ -40,7 +40,7 @@ export default class ApiProductsController {
    */
   async store({ request, response }: HttpContext) {
     try {
-      const payload = await request.validateUsing(createProductValidator)
+      const payload = await createProductValidator.validate(request.all())
       if (payload.image) {
         await payload.image.move(app.makePath('storage/uploads'), {
           name: `${cuid()}.${payload.image.extname}`,
@@ -84,7 +84,7 @@ export default class ApiProductsController {
    */
   async update({ params, request, response }: HttpContext) {
     try {
-      const payload = await request.validateUsing(updateProductValidator)
+      const payload = await updateProductValidator.validate(request.all())
       const product = await Product.findOrFail(params.id)
 
       if (payload.image) {
