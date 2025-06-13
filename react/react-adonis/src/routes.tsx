@@ -5,8 +5,6 @@ import { Login } from './pages/auth/login'
 import ProtectedRoute from './pages/protectedRoute'
 import RolesIndex from './pages/roles'
 
-const roleId = JSON.parse(String(localStorage.getItem('user'))).role_id
-
 const router = createBrowserRouter([
   {
     path: '/admin',
