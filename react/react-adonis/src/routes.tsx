@@ -1,15 +1,15 @@
-import { createBrowserRouter } from "react-router";
-import Layout from "./components/layout/layout";
-import ProductIndex from "./pages/products";
-import { Login } from "./pages/auth/login";
-import ProtectedRoute from "./pages/protectedRoute";
-import RolesIndex from "./pages/roles";
+import { createBrowserRouter } from 'react-router'
+import Layout from './components/layout/layout'
+import ProductIndex from './pages/products'
+import { Login } from './pages/auth/login'
+import ProtectedRoute from './pages/protectedRoute'
+import RolesIndex from './pages/roles'
 
-const roleId = JSON.parse(String(localStorage.getItem("user"))).role_id;
+const roleId = JSON.parse(String(localStorage.getItem('user'))).role_id
 
 const router = createBrowserRouter([
   {
-    path: "/admin",
+    path: '/admin',
     element: (
       <ProtectedRoute>
         <Layout />
@@ -17,19 +17,19 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "products",
+        path: 'products',
         element: <ProductIndex />,
       },
       {
-        path: "roles",
+        path: 'roles',
         element: <RolesIndex />,
       },
     ],
   },
   {
-    path: "/",
+    path: '/',
     element: <Login />,
   },
-]);
+])
 
-export default router;
+export default router

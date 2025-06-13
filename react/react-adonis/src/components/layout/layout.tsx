@@ -1,6 +1,6 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Outlet } from "react-router";
-import { AppSidebar } from "./sidebar/app-sidebar";
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { Outlet } from 'react-router'
+import { AppSidebar } from './sidebar/app-sidebar'
 
 export default function Layout() {
   return (
@@ -13,5 +13,5 @@ export default function Layout() {
         </div>
       </main>
     </SidebarProvider>
-  );
+  )
 }
