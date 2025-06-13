@@ -42,6 +42,8 @@ router
     router.post('register', [ApiAuthsController, 'register'])
     router
       .group(() => {
+        router.post('logout', [ApiAuthsController, 'logout'])
+
         router.get('products', [ApiProductsController, 'showAll'])
         router.get('products/:id', [ApiProductsController, 'show'])
         router.post('products', [ApiProductsController, 'store'])

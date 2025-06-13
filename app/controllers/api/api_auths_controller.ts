@@ -49,4 +49,12 @@ export default class ApiAuthsController {
     await auth.use('jwt').authenticate()
     return auth.user
   }
+
+  async logout({ auth, response }: HttpContext) {
+    await auth.use('jwt').clear()
+    return response.json({
+      message: 'Pengguna berhasil logout',
+      data: null,
+    })
+  }
 }

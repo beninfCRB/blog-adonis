@@ -166,4 +166,12 @@ export class JwtGuard<UserProvider extends JwtUserProviderContract<unknown>>
       },
     }
   }
+
+  /**
+   * Logout user and remove jwt token
+   */
+  async clear(): Promise<void> {
+    this.user = undefined
+    this.#ctx.request.headers()['authorization'] = undefined
+  }
 }
