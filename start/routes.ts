@@ -42,37 +42,30 @@ router
     router.post('register', [ApiAuthsController, 'register'])
     router
       .group(() => {
-        router.post('me', [ApiAuthsController, 'me'])
-        router.get('books', [BooksController, 'showAll'])
-        router.get('books/:id', [BooksController, 'show'])
-        router.post('books', [BooksController, 'store'])
-        router.put('books/:id', [BooksController, 'update'])
-        router.delete('books/:id', [BooksController, 'destroy'])
-
         router.get('products', [ApiProductsController, 'showAll'])
         router.get('products/:id', [ApiProductsController, 'show'])
         router.post('products', [ApiProductsController, 'store'])
         router.put('products/:id', [ApiProductsController, 'update'])
         router.delete('products/:id', [ApiProductsController, 'destroy'])
-
-        router.get('roles', [ApiRolesController, 'showAll'])
         router.get('roles/:id', [ApiRolesController, 'show'])
-        router.post('roles', [ApiRolesController, 'store'])
-        router.put('roles/:id', [ApiRolesController, 'update'])
-        router.delete('roles/:id', [ApiRolesController, 'destroy'])
+
+        router
+          .group(() => {
+            router.post('me', [ApiAuthsController, 'me'])
+            router.get('books', [BooksController, 'showAll'])
+            router.get('books/:id', [BooksController, 'show'])
+            router.post('books', [BooksController, 'store'])
+            router.put('books/:id', [BooksController, 'update'])
+            router.delete('books/:id', [BooksController, 'destroy'])
+
+            router.get('roles', [ApiRolesController, 'showAll'])
+            router.post('roles', [ApiRolesController, 'store'])
+            router.put('roles/:id', [ApiRolesController, 'update'])
+            router.delete('roles/:id', [ApiRolesController, 'destroy'])
+          })
+          .use([middleware.role({ role: 'admin' })])
       })
-      .use([middleware.auth(), middleware.role({ role: 'admin' })])
+      .use(middleware.auth())
   })
   .prefix('api/admin')
   .use([middleware.api()])
-
-router
-  .group(() => {
-    router.get('products', [ApiProductsController, 'showAll'])
-    router.get('products/:id', [ApiProductsController, 'show'])
-    router.post('products', [ApiProductsController, 'store'])
-    router.put('products/:id', [ApiProductsController, 'update'])
-    router.delete('products/:id', [ApiProductsController, 'destroy'])
-  })
-  .prefix('api')
-  .use([middleware.api(), middleware.role({ role: 'user' })])
