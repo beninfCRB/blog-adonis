@@ -1,11 +1,9 @@
-import Product from '#models/product'
+import Role from '#models/role'
 import { createProductValidator, updateProductValidator } from '#validators/product'
-import { cuid } from '@adonisjs/core/helpers'
 import type { HttpContext } from '@adonisjs/core/http'
-import app from '@adonisjs/core/services/app'
 import db from '@adonisjs/lucid/services/db'
 
-export default class ApiProductsController {
+export default class ApiRolesController {
   /**
    * Handle form submission for the get action
    */
@@ -15,7 +13,7 @@ export default class ApiProductsController {
       const limit = request.input('limit', 10)
       const search = request.input('search')
       const query = db.query()
-      query.from('products')
+      query.from('roles')
 
       if (search) {
         query.where('name', 'like', `%${search}%`)
@@ -24,7 +22,7 @@ export default class ApiProductsController {
       const data = await query.paginate(page, limit)
 
       return response.json({
-        message: 'Produk berhasil diambil',
+        message: 'Role berhasil diambil',
         data,
       })
     } catch (error) {
@@ -41,16 +39,9 @@ export default class ApiProductsController {
   async store({ request, response }: HttpContext) {
     try {
       const payload = await request.validateUsing(createProductValidator)
-      if (payload.image) {
-        await payload.image.move(app.makePath('storage/uploads'), {
-          name: `${cuid()}.${payload.image.extname}`,
-        })
-      }
-      const imagePath = payload.image ? `storage/uploads/${payload.image.fileName}` : null
-
-      const data = await Product.create({ ...payload, imagePath })
+      const data = await Role.create(payload)
       return response.json({
-        message: 'Produk berhasil ditambahkan',
+        message: 'Role berhasil ditambahkan',
         data,
       })
     } catch (error) {
@@ -66,9 +57,9 @@ export default class ApiProductsController {
    */
   async show({ params, response }: HttpContext) {
     try {
-      const data = await Product.findOrFail(params.id)
+      const data = await Role.findOrFail(params.id)
       return response.json({
-        message: 'Produk berhasil diambil',
+        message: 'Role berhasil diambil',
         data,
       })
     } catch (error) {
@@ -85,26 +76,18 @@ export default class ApiProductsController {
   async update({ params, request, response }: HttpContext) {
     try {
       const payload = await request.validateUsing(updateProductValidator)
-      const product = await Product.findOrFail(params.id)
-
-      if (payload.image) {
-        await payload.image.move(app.makePath('storage/uploads'), {
-          name: `${cuid()}.${payload.image.extname}`,
-        })
-      }
-      const imagePath = payload.image ? `storage/uploads/${payload.image.fileName}` : null
-
-      product.merge({ ...payload, imagePath })
-      await product.save()
+      const role = await Role.findOrFail(params.id)
+      role.merge(payload)
+      await role.save()
 
       return response.json({
-        message: `Produk dengan ID ${params.id} berhasil diupdate`,
-        data: product,
+        message: `Role dengan ID ${params.id} berhasil diupdate`,
+        data: role,
       })
     } catch (error) {
       if (error === 'E_RECORD_NOT_FOUND') {
         return response.notFound({
-          message: `Produk dengan ID ${params.id} tidak ditemukan`,
+          message: `Role dengan ID ${params.id} tidak ditemukan`,
           data: null,
         })
       }
@@ -120,16 +103,16 @@ export default class ApiProductsController {
    */
   async destroy({ params, response }: HttpContext) {
     try {
-      const product = await Product.findOrFail(params.id)
-      await product.delete()
+      const role = await Role.findOrFail(params.id)
+      await role.delete()
       return response.json({
-        message: `Produk dengan ID ${params.id} berhasil dihapus`,
+        message: `Role dengan ID ${params.id} berhasil dihapus`,
         data: null,
       })
     } catch (error) {
       if (error === 'E_RECORD_NOT_FOUND') {
         return response.notFound({
-          message: `Produk dengan ID ${params.id} tidak ditemukan`,
+          message: `Role dengan ID ${params.id} tidak ditemukan`,
           data: null,
         })
       }

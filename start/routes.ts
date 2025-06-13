@@ -14,6 +14,7 @@ import { middleware } from '#start/kernel'
 import ProductsController from '#controllers/products_controller'
 import ApiProductsController from '#controllers/api/api_products_controller'
 import ApiAuthsController from '#controllers/api/api_auths_controller'
+import ApiRolesController from '#controllers/api/api_roles_controller'
 
 router.on('/').render('pages/home.edge')
 router
@@ -53,8 +54,25 @@ router
         router.post('products', [ApiProductsController, 'store'])
         router.put('products/:id', [ApiProductsController, 'update'])
         router.delete('products/:id', [ApiProductsController, 'destroy'])
+
+        router.get('roles', [ApiRolesController, 'showAll'])
+        router.get('roles/:id', [ApiRolesController, 'show'])
+        router.post('roles', [ApiRolesController, 'store'])
+        router.put('roles/:id', [ApiRolesController, 'update'])
+        router.delete('roles/:id', [ApiRolesController, 'destroy'])
       })
-      .use(middleware.auth())
+      .use([middleware.auth(), middleware.role({ role: 'admin' })])
   })
   .prefix('api/admin')
   .use([middleware.api()])
+
+router
+  .group(() => {
+    router.get('products', [ApiProductsController, 'showAll'])
+    router.get('products/:id', [ApiProductsController, 'show'])
+    router.post('products', [ApiProductsController, 'store'])
+    router.put('products/:id', [ApiProductsController, 'update'])
+    router.delete('products/:id', [ApiProductsController, 'destroy'])
+  })
+  .prefix('api')
+  .use([middleware.api(), middleware.role({ role: 'user' })])

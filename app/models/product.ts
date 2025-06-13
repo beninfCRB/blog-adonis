@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, scope, beforeFetch, beforeFind } from '@adonisjs/lucid/orm'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -7,6 +7,9 @@ export default class Product extends BaseModel {
 
   @column()
   declare name: string
+
+  @column()
+  declare sku: string | null
 
   @column()
   declare description?: string | null
@@ -17,9 +20,16 @@ export default class Product extends BaseModel {
   @column()
   declare stock: number
 
+  @column()
+  declare imagePath: string | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  static inStock = scope((query) => {
+    query.where('stock', '>', 0)
+  })
 }

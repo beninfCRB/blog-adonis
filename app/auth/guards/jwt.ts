@@ -6,6 +6,7 @@ import { JwtUserProviderContract } from '../provider/user.js'
 
 export type JwtGuardOptions = {
   secret: string
+  expiresIn: number
 }
 
 export class JwtGuard<UserProvider extends JwtUserProviderContract<unknown>>
@@ -53,13 +54,17 @@ export class JwtGuard<UserProvider extends JwtUserProviderContract<unknown>>
    */
   async generate(user: UserProvider[typeof symbols.PROVIDER_REAL_USER]) {
     const providerUser = await this.#userProvider.createUserForGuard(user)
-    const token = jwt.sign({ userId: providerUser.getId() }, this.#options.secret)
+    const newUser: object = {
+      userId: providerUser.getOriginal().id,
+      fullName: providerUser.getOriginal().fullName,
+      email: providerUser.getOriginal().email,
+    }
+    const token = jwt.sign(newUser, this.#options.secret, {
+      expiresIn: 60 * Number(this.#options.expiresIn),
+    })
 
     return {
-      message: 'Berhasil',
-      data: {
-        token: token,
-      },
+      token,
     }
   }
 
@@ -157,7 +162,7 @@ export class JwtGuard<UserProvider extends JwtUserProviderContract<unknown>>
     const token = await this.generate(user)
     return {
       headers: {
-        authorization: `Bearer ${token.data}`,
+        authorization: `Bearer ${token}`,
       },
     }
   }

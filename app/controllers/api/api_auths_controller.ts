@@ -3,7 +3,7 @@ import { loginValidator, registerValidator } from '#validators/auth'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ApiAuthsController {
-  async register({ auth, request, response }: HttpContext) {
+  async register({ request, response }: HttpContext) {
     try {
       const data = request.all()
       const payload = await registerValidator.validate(data)
@@ -26,8 +26,17 @@ export default class ApiAuthsController {
       const data = request.all()
       const payload = await loginValidator.validate(data)
       const user = await User.verifyCredentials(payload.email, payload.password)
+      const { token } = await auth.use('jwt').generate(user)
 
-      return await auth.use('jwt').generate(user)
+      return await response.json({
+        message: 'Pengguna berhasil login',
+        data: {
+          fullName: user.fullName,
+          email: user.email,
+          role: user.role?.name,
+          token,
+        },
+      })
     } catch (error) {
       return response.badRequest({
         message: error.message,

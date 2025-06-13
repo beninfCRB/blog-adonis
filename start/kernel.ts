@@ -26,6 +26,7 @@ server.use([
   () => import('#middleware/container_bindings_middleware'),
   () => import('@adonisjs/static/static_middleware'),
   () => import('@adonisjs/vite/vite_middleware'),
+  () => import('@adonisjs/cors/cors_middleware')
 ])
 
 /**
@@ -43,6 +44,7 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  role: () => import('#middleware/role_middleware'),
   auth: () => import('#middleware/auth_middleware'),
   csrf: () => import('@adonisjs/shield/shield_middleware'),
   api: () => import('#middleware/api_middleware'),

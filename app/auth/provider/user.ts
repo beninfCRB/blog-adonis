@@ -1,3 +1,4 @@
+import User from '#models/user'
 import { symbols } from '@adonisjs/auth'
 
 /**
@@ -13,7 +14,7 @@ export type JwtGuardUser<RealUser> = {
   /**
    * Returns the original user object
    */
-  getOriginal(): RealUser
+  getOriginal(): User
 }
 
 /**

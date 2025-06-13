@@ -12,6 +12,7 @@ const staticServerConfig = defineConfig({
   etag: true,
   lastModified: true,
   dotFiles: 'ignore',
+  maxAge: 3600,
 })
 
 export default staticServerConfig
