@@ -90,7 +90,7 @@ export const Login = () => {
               <Button
                 variant="secondary"
                 type="submit"
-                className="w-full text-black"
+                className="w-full text-black mt-8"
                 disabled={loading}
               >
                 Login
