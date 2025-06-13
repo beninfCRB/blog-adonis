@@ -7,19 +7,20 @@ import {
 } from '@/components/ui/dialog'
 import axiosDynamic from '@/utils/axios'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router'
 import { toast } from 'react-toastify'
-import { z } from 'zod'
+import { set, z } from 'zod'
 import { Button } from '../ui/button'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-import { useEffect } from 'react'
 
 const FormProduct = () => {
   const navigate = useNavigate()
-  const [searchParams, _] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [loading, setLoading] = useState(false)
 
   const formSchema = z.object({
     name: z.string(),
@@ -40,21 +41,27 @@ const FormProduct = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setLoading(true)
       if (searchParams.get('id')) {
         await axiosDynamic.put(`/api/admin/products/${searchParams.get('id')}`, values).then(() => {
           toast.success('Product updated successfully')
+          handleReset()
           navigate(0)
-          form.reset()
+          setLoading(false)
         })
         return
       } else {
         await axiosDynamic.post(`/api/admin/products`, values).then(() => {
           toast.success('Product added successfully')
+          handleReset()
           navigate(0)
+          setLoading(false)
         })
+        return
       }
     } catch (error) {
       toast.error('Product added failed')
+      setLoading(false)
     }
   }
 
@@ -62,8 +69,14 @@ const FormProduct = () => {
     handleSubmit(onSubmit)()
   }
 
-  const fetchProducts = (id: string) => {
-    axiosDynamic
+  const handleReset = () => {
+    form.reset()
+    searchParams.delete('id')
+    setSearchParams('')
+  }
+
+  const fetchProducts = async (id: string) => {
+    await axiosDynamic
       .get(`/api/admin/products/${id}`)
       .then((response) => {
         const res = response.data.data
@@ -154,9 +167,11 @@ const FormProduct = () => {
           />
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" onClick={handleReset}>
+                Cancel
+              </Button>
             </DialogClose>
-            <Button onClick={handleSave} className="text-black">
+            <Button onClick={handleSubmit(onSubmit)} className="text-black" disabled={loading}>
               {searchParams.get('id') ? 'Update' : 'Save'}
             </Button>
           </DialogFooter>

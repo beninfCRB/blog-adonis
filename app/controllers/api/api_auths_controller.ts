@@ -33,7 +33,7 @@ export default class ApiAuthsController {
         data: {
           fullName: user.fullName,
           email: user.email,
-          role: user.role?.name,
+          roleId: user.roleId,
           token,
         },
       })

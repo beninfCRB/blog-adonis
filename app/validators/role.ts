@@ -7,7 +7,7 @@ export const createRoleValidator = vine.compile(
   })
 )
 
-export const updateProductValidator = vine.compile(
+export const updateRoleValidator = vine.compile(
   vine.object({
     name: vine.string(),
     description: vine.string().nullable(),

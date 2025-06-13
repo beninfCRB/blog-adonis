@@ -1,6 +1,5 @@
 import Role from '#models/role'
-import { updateProductValidator } from '#validators/product'
-import { createRoleValidator } from '#validators/role'
+import { createRoleValidator, updateRoleValidator } from '#validators/role'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 
@@ -76,7 +75,7 @@ export default class ApiRolesController {
    */
   async update({ params, request, response }: HttpContext) {
     try {
-      const payload = await updateProductValidator.validate(request.all())
+      const payload = await updateRoleValidator.validate(request.all())
       const role = await Role.findOrFail(params.id)
       role.merge(payload)
       await role.save()

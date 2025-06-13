@@ -15,17 +15,16 @@ import { Button } from '../ui/button'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const FormRoles = () => {
   const navigate = useNavigate()
-  const [searchParams, _] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [loading, setLoading] = useState(false)
 
   const formSchema = z.object({
     name: z.string(),
     description: z.string(),
-    price: z.number(),
-    stock: z.number(),
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,37 +39,43 @@ const FormRoles = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setLoading(true)
       if (searchParams.get('id')) {
         await axiosDynamic.put(`/api/admin/roles/${searchParams.get('id')}`, values).then(() => {
           toast.success('Product updated successfully')
+          handleReset()
           navigate(0)
-          form.reset()
+          setLoading(false)
         })
         return
       } else {
         await axiosDynamic.post(`/api/admin/roles`, values).then(() => {
           toast.success('Product added successfully')
+          handleReset()
           navigate(0)
+          setLoading(false)
         })
+        return
       }
     } catch (error) {
       toast.error('Product added failed')
+      setLoading(false)
     }
   }
 
-  const handleSave = () => {
-    handleSubmit(onSubmit)()
+  const handleReset = () => {
+    form.reset()
+    searchParams.delete('id')
+    setSearchParams('')
   }
 
-  const fetchRoles = (id: string) => {
-    axiosDynamic
+  const fetchRoles = async (id: string) => {
+    await axiosDynamic
       .get(`/api/admin/roles/${id}`)
       .then((response) => {
         const res = response.data.data
         form.setValue('name', res.name)
         form.setValue('description', res.description)
-        form.setValue('price', Number(res.price))
-        form.setValue('stock', Number(res.stock))
       })
       .catch((error) => {
         console.log(error)
@@ -118,9 +123,11 @@ const FormRoles = () => {
           />
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" onClick={handleReset}>
+                Cancel
+              </Button>
             </DialogClose>
-            <Button onClick={handleSave} className="text-black">
+            <Button onClick={handleSubmit(onSubmit)} className="text-black" disabled={loading}>
               {searchParams.get('id') ? 'Update' : 'Save'}
             </Button>
           </DialogFooter>
